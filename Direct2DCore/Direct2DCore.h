@@ -3,8 +3,7 @@ class __declspec(dllexport) Direct2DCore
 {
 private:
 	ID2D1Factory* _pD2DFactory;
-	ID2D1HwndRenderTarget* _pRenderTarget;
-	ID2D1BitmapRenderTarget* _pBitmapRenderTarget;
+	IWICImagingFactory* _pWICFactory;
 
 public:
 	static Direct2DCore* GetInstance() 
@@ -13,18 +12,12 @@ public:
 		return &s_instance;
 	}
 
-	ID2D1HwndRenderTarget* GetHWNDRT() 
-	{
-		return _pRenderTarget;
-	}
-
-	ID2D1BitmapRenderTarget* GetBitmapRT() 
-	{
-		return _pBitmapRenderTarget;
-	}
-
 public:
 	void Init(HWND hWnd);
 	void Clear();
+
+	void  CreateRenderTarget(HWND hWnd, ID2D1HwndRenderTarget** rt);
+	void  CreateBitmapRenderTarget(HWND hWnd, ID2D1HwndRenderTarget* rt, ID2D1BitmapRenderTarget** brt);
+	class Direct2DBitmap* Direct2DLoadBitmap(const wchar_t* filePath, ID2D1RenderTarget* rt);
 };
 

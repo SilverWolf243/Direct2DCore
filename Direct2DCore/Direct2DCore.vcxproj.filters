@@ -21,6 +21,9 @@
     <ClInclude Include="Direct2DCore.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Direct2DBitmap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -30,6 +33,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Direct2DCore.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Direct2DBitmap.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

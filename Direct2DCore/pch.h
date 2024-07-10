@@ -8,4 +8,6 @@
 #include <wincodec.h>
 #include <windows.h>
 #include <cassert>
+#include <vector>
+using namespace std;
 #endif
