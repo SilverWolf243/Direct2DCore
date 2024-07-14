@@ -6,6 +6,9 @@ void Direct2DCore::Init(HWND hWnd)
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_pD2DFactory);
 	assert(hr == S_OK && "D2D1CreateFactory Init 에러 발생");
 
+	hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&_pDWriteFactory));
+	assert(hr == S_OK && "DWriteCreateFactory Init 에러 발생");
+
 	hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	assert(hr == S_OK && "CoInitializeEx Init 에러 발생");
 
@@ -33,10 +36,22 @@ void Direct2DCore::CreateRenderTarget(HWND hWnd, ID2D1HwndRenderTarget** rt)
 	assert(hr == S_OK && "CreateRenderTarget 에러 발생");
 }
 
+void Direct2DCore::CreateTextFromat(IDWriteTextFormat** pTextFormat, const wchar_t* fontName, DWRITE_FONT_WEIGHT fontWeight, DWRITE_FONT_STYLE fontStyle, DWRITE_FONT_STRETCH fontStretch, float fontSize)
+{
+	HRESULT hr = _pDWriteFactory->CreateTextFormat(fontName, NULL, fontWeight, fontStyle, fontStretch, fontSize, L"en-us", pTextFormat);
+	assert(hr == S_OK && "CreateTextFromat 에러 발생");
+}
+
 void Direct2DCore::CreateBitmapRenderTarget(HWND hWnd, ID2D1HwndRenderTarget* rt, ID2D1BitmapRenderTarget** brt)
 {
 	HRESULT hr = rt->CreateCompatibleRenderTarget(brt);
 	assert(hr == S_OK && "CreateBitmapRenderTarget 에러 발생");
+}
+
+void Direct2DCore::CreateSolidColorBrush(ID2D1HwndRenderTarget* rt, const D2D1_COLOR_F color, ID2D1SolidColorBrush** brush)
+{
+	HRESULT hr = rt->CreateSolidColorBrush(color, brush);
+	assert(hr == S_OK && "CreateSolidColorBrush 에러 발생");
 }
 
 Direct2DBitmap* Direct2DCore::Direct2DLoadBitmap(const wchar_t* filePath, ID2D1RenderTarget* rt)

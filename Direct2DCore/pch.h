@@ -9,5 +9,6 @@
 #include <windows.h>
 #include <cassert>
 #include <vector>
+#include <dwrite.h>
 using namespace std;
 #endif

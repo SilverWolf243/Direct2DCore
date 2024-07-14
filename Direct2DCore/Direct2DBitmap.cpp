@@ -4,7 +4,3 @@
 Direct2DBitmap::Direct2DBitmap()
 {
 }
-
-Direct2DBitmap::~Direct2DBitmap()
-{
-}
