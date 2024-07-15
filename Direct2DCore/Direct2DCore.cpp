@@ -69,11 +69,29 @@ Direct2DBitmap* Direct2DCore::Direct2DLoadBitmap(const wchar_t* filePath, ID2D1R
 		WICDecodeMetadataCacheOnLoad,
 		&pDecoder
 	);
-
 	assert(hr == S_OK && "_pWICFactory->CreateDecoderFromFilename 에러 발생");
+	
 	hr = pDecoder->GetFrame(0, &pSource);
-	assert(hr == S_OK && "pDecoder->GetFrame 에러 발생");
+	assert(hr == S_OK && "pDecoder->GetFrame(0, &pSource) 에러 발생");
+
+	IWICBitmapSource* bitmapSource = pSource;
+	hr = WICConvertBitmapSource(GUID_WICPixelFormat32bppPBGRA, pSource, &bitmapSource);
+	assert(hr == S_OK && "WICConvertBitmapSource 에러 발생");
+
+	UINT width = 0;
+	UINT height = 0;
+	hr = bitmapSource->GetSize(&width, &height);
+	assert(hr == S_OK && "bitmapSource->GetSize 에러 발생");
+
+	const int buffSize = width * height * 4;
+	BYTE* buffer = new BYTE[width * height * 4];
+	hr = bitmapSource->CopyPixels(NULL, width * 4, buffSize, buffer);
+	assert(hr == S_OK && "bitmapSource->CopyPixels 에러 발생");
+
+	bitmapSource->Release();
+	assert(hr == S_OK && "bitmapSource->Release() 에러 발생");
 	hr = _pWICFactory->CreateFormatConverter(&pConverter);
+	
 	assert(hr == S_OK && "_pWICFactory->CreateFormatConverter 에러 발생");
 	hr = pConverter->Initialize(
 		pSource
@@ -89,15 +107,7 @@ Direct2DBitmap* Direct2DCore::Direct2DLoadBitmap(const wchar_t* filePath, ID2D1R
 	hr = rt->CreateBitmapFromWicBitmap(pConverter, nullptr, &pBitmap);
 	assert(hr == S_OK && "CreateBitmapFromWicBitmap 에러 발생");
 
-	UINT width, height;
-	pSource->GetSize(&width, &height);
-
-	UINT stride = width * 4;
-	UINT size = stride * height;
-	Direct2DBitmap* bitmap = new Direct2DBitmap(width, height, pBitmap);
-	bitmap->RefBuffer().resize(size);
-	hr = pSource->CopyPixels(nullptr, stride, size, bitmap->RefBuffer().data());
-	assert(hr == S_OK && "pSource->CopyPixels 에러 발생");
+	Direct2DBitmap* bitmap = new Direct2DBitmap(width, height, pBitmap, buffer);
 	
 	if (pDecoder) pDecoder->Release();
 	if (pSource) pSource->Release();
