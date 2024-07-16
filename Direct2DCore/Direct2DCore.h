@@ -13,7 +13,7 @@ public:
 	}
 
 public:
-	void Init(HWND hWnd);
+	void Init();
 	void Clear();
 
 	void  CreateTextFromat(IDWriteTextFormat** pTextFormat, const wchar_t* fontName, DWRITE_FONT_WEIGHT fontWeight, DWRITE_FONT_STYLE fontStyle, DWRITE_FONT_STRETCH fontStretch, float fontSize);

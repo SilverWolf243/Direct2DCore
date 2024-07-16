@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Direct2DCore.h"
 #include "Direct2DBitmap.h"
-void Direct2DCore::Init(HWND hWnd)
+void Direct2DCore::Init()
 {
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &_pD2DFactory);
 	assert(hr == S_OK && "D2D1CreateFactory Init 에러 발생");
